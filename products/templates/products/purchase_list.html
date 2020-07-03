@@ -1,0 +1,50 @@
+{% extends 'products/base.html' %}
+
+
+{% block title %}Your Purchases{% endblock %}
+
+{% block content %}
+
+ <h1 class="display-4" align="center">YOUR PURCHASES</h1>
+ <div  align="center">
+     <table class="table table-dark table-borderless">
+  <thead>
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Description</th>
+        <th>Quantity</th>
+      <th scope="col">Cost</th>
+      <th scope="col">Status</th>
+       <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for purchase in purchase_list.all %}
+     {% if user == purchase.user %}
+    <tr>
+      <td>{{ purchase.product }}</td>
+        <td><a href="{% url 'product_by_id' purchase.product.id %}" style="color: white" >{{ purchase.product.description | truncatechars:80 }}</a></td>
+      <td>{{ purchase.quantity }}</td>
+      <td>{{ purchase.cost }} $</td>
+        {% for i in purchase.STATUSES %}
+        {% for j in i %}
+        {% if purchase.status in i and j != purchase.status %}
+        <td> <span class="badge badge-info" >{{ j }}</span></td>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+         {% if purchase.status == 1 %}
+        <td><form action="" method="post">
+            <input type="hidden" name="purchase_id" value="{{purchase.id}}">
+            <input class="btn btn-success" type="submit" value="Cancel">
+                  {% csrf_token %}
+            </form></td>
+    </tr>
+     {% endif %}
+     {% endif %}
+     {% endfor %}
+  </tbody>
+</table>
+ <a class="btn btn-outline-info" href="#" onclick="history.back();"><</a>
+ </div>
+{% endblock %}

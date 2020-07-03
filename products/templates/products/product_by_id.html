@@ -1,0 +1,14 @@
+{% extends 'products/base.html' %}
+
+
+{% block title %}{{ product_id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+     <h1>{{ product.name }}</h1>
+     <div>{{ product.description }}</div>
+     <p><img src="{{product.image.url}}"  alt="" width="200px"></p>
+     <a class="btn btn-outline-info" href="#" onclick="history.back();"><</a>
+
+</div>
+{% endblock %}

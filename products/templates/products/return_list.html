@@ -1,0 +1,62 @@
+{% extends 'products/base.html' %}
+
+
+{% block title %}Your Returns{% endblock %}
+
+{% block content %}
+
+
+ <h1 class="display-4" align="center">NEW RETURNS</h1>
+ <div  align="center">
+     <table class="table table-dark table-borderless" >
+  <thead>
+    <tr>
+        <th scope="col">Buyer</th>
+      <th scope="col">Product Name</th>
+        <th>Quantity</th>
+      <th scope="col">Cost</th>
+      <th scope="col">Status / Action</th>
+<!--       <th scope="col">Actions</th>-->
+    </tr>
+  </thead>
+  <tbody>
+   {% for return in return_list.all %}
+    <tr>
+        <td>{{ return.purchase.user }}</td>
+      <td>{{ return.purchase.product }}</td>
+      <td>{{ return.purchase.quantity }}</td>
+      <td>{{ return.purchase.cost }} $</td>
+<!--        {% for i in return.STATUSES %}-->
+<!--        {% for j in i %}-->
+<!--        {% if return.status in i and j != return.status %}-->
+<!--        <td>{{ j }}</td>-->
+<!--        {% endif %}-->
+<!--        {% endfor %}-->
+<!--        {% endfor %}-->
+        {% if return.status == 1 %}
+        <td><form action="" method="post">
+            <input type="hidden" name="return_id" value="{{return.id}}">
+            <input class="btn btn-outline-info" type="submit" name="action" value="Approve">
+            <input class="btn btn-outline-danger" type="submit" name="action" value="Decline">
+                  {% csrf_token %}
+            </form></td>
+        {% else %}
+        <td>
+             {% if return.status == 2 %}
+             <span class="badge badge-danger" >
+             DECLINED
+             {% elif return.status == 3 %}
+             <span class="badge badge-info" >
+             APPROVED
+             {% endif %}
+             </span>
+        </td>
+    </tr>
+     {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+<a class="btn btn-outline-info" href="#" onclick="history.back();"><</a>
+ </div>
+{% endblock %}
+

@@ -1,0 +1,50 @@
+{% extends 'products/base.html' %}
+
+
+{% block title %}Our Products{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row row-cols-2">
+     {% for product in product_list %}
+      <div class="col">
+          <a href="{% url 'product_by_id' product.id %}" style="color: black"> <h3>{{ product.name }}</h3></a>
+        {% if product.image %}
+       <img src="{{product.image.url}}"  alt="" width="75px">
+        {% else %}
+        Нет картинки
+        {% endif %}
+
+     {% if user.is_superuser %}
+     <a class="btn btn-dark" href="{% url 'edit_product' product.id %}">Edit</a>
+     {% endif %}
+     <table>
+     <tr>
+         <td><span class="badge badge-info">{{ product.price }} $</span></td>
+         <td class="centered">
+             {% if product.in_stock %}
+             <span class="badge badge-success" >
+             In Stock {{ product.quantity }}
+             {% else %}
+             <span class="badge badge-danger" >
+             Not in stock
+             {% endif %}
+             </span>
+             </span></td>
+     </tr>
+     </table>
+     {% if product.in_stock and user.is_authenticated and not user.is_superuser%}
+     <form action="" method="post" style="padding: 10px">
+                <label>Quantity:</label>
+                <input type="number" name="quantity" value="0" min="1">
+                <input type="hidden" name="product_id" value="{{product.id}}">
+                <input class="btn btn-dark" type="submit" value="Buy">
+                  {% csrf_token %}
+            </form>
+       {% endif %}
+          </div>
+     {% endfor %}
+     </div>
+    <a class="btn btn-outline-info" href="#" onclick="history.back();"><</a>
+ </div>
+{% endblock %}
